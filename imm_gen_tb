@@ -1,0 +1,58 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib/aarch64-linux-gnu/ivl/system.vpi";
+:vpi_module "/usr/lib/aarch64-linux-gnu/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib/aarch64-linux-gnu/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib/aarch64-linux-gnu/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib/aarch64-linux-gnu/ivl/va_math.vpi";
+:vpi_module "/usr/lib/aarch64-linux-gnu/ivl/v2009.vpi";
+S_0xb58078aa5aa0 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0xb58078aa5c30 .scope module, "tb_imm_gen" "tb_imm_gen" 3 1;
+ .timescale 0 0;
+v0xb58078ab84f0_0 .var "instr", 31 0;
+v0xb58078ab85b0_0 .net "out", 31 0, L_0xb58078ab8bf0;  1 drivers
+S_0xb58078a6c680 .scope module, "uut" "imm_gen" 3 6, 4 1 0, S_0xb58078aa5c30;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "instr";
+    .port_info 1 /OUTPUT 32 "out";
+v0xb58078a6c860_0 .net *"_ivl_1", 0 0, L_0xb58078ab8680;  1 drivers
+v0xb58078ab80e0_0 .net *"_ivl_2", 19 0, L_0xb58078ab87a0;  1 drivers
+v0xb58078ab81c0_0 .net *"_ivl_5", 11 0, L_0xb58078ab8b50;  1 drivers
+v0xb58078ab8280_0 .net "instr", 31 0, v0xb58078ab84f0_0;  1 drivers
+v0xb58078ab8360_0 .net "out", 31 0, L_0xb58078ab8bf0;  alias, 1 drivers
+L_0xb58078ab8680 .part v0xb58078ab84f0_0, 31, 1;
+LS_0xb58078ab87a0_0_0 .concat [ 1 1 1 1], L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680;
+LS_0xb58078ab87a0_0_4 .concat [ 1 1 1 1], L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680;
+LS_0xb58078ab87a0_0_8 .concat [ 1 1 1 1], L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680;
+LS_0xb58078ab87a0_0_12 .concat [ 1 1 1 1], L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680;
+LS_0xb58078ab87a0_0_16 .concat [ 1 1 1 1], L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680, L_0xb58078ab8680;
+LS_0xb58078ab87a0_1_0 .concat [ 4 4 4 4], LS_0xb58078ab87a0_0_0, LS_0xb58078ab87a0_0_4, LS_0xb58078ab87a0_0_8, LS_0xb58078ab87a0_0_12;
+LS_0xb58078ab87a0_1_4 .concat [ 4 0 0 0], LS_0xb58078ab87a0_0_16;
+L_0xb58078ab87a0 .concat [ 16 4 0 0], LS_0xb58078ab87a0_1_0, LS_0xb58078ab87a0_1_4;
+L_0xb58078ab8b50 .part v0xb58078ab84f0_0, 20, 12;
+L_0xb58078ab8bf0 .concat [ 12 20 0 0], L_0xb58078ab8b50, L_0xb58078ab87a0;
+    .scope S_0xb58078aa5c30;
+T_0 ;
+    %vpi_call/w 3 12 "$dumpfile", "/waveform/imm_gen.vcd" {0 0 0};
+    %vpi_call/w 3 13 "$dumpvars", 32'sb00000000000000000000000000000000, S_0xb58078aa5c30 {0 0 0};
+    %pushi/vec4 5243027, 0, 32;
+    %store/vec4 v0xb58078ab84f0_0, 0, 32;
+    %delay 10, 0;
+    %vpi_call/w 3 16 "$display", "instr = %h, out = %h", v0xb58078ab84f0_0, v0xb58078ab85b0_0 {0 0 0};
+    %pushi/vec4 4293918867, 0, 32;
+    %store/vec4 v0xb58078ab84f0_0, 0, 32;
+    %delay 10, 0;
+    %vpi_call/w 3 20 "$display", "instr = %h, out = %h", v0xb58078ab84f0_0, v0xb58078ab85b0_0 {0 0 0};
+    %vpi_call/w 3 22 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "-";
+    "tb/imm_gen_tb.sv";
+    "rtl/immediate_generator.sv";
