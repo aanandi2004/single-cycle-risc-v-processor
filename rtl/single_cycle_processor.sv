@@ -126,16 +126,6 @@ module single_cycle_processor (
                              instruction[11:7]};
             end
 
-            // B-Type
-            7'b1100011: begin
-                immediate = {{19{instruction[31]}},
-                             instruction[31],
-                             instruction[7],
-                             instruction[30:25],
-                             instruction[11:8],
-                             1'b0};
-            end
-
             default: begin
                 immediate = 32'b0;
             end
@@ -148,8 +138,8 @@ module single_cycle_processor (
     // 7. ALU Control
 
     alu_control ALU_CTRL (
-        .funct7(instruction[31:25]),
-        .funct3(instruction[14:12]),
+        .funct7(instruction[31:25]), // why-
+        .funct3(instruction[14:12]),//why 
         .ALUOp(ALUOp),
         .alu_ctrl_out(alu_ctrl_out)
     );

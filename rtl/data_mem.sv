@@ -17,10 +17,16 @@ module data_mem(
 
         else if (memwrite)
             mem[add] <= write_data;
+    end
 
+        // Combinational read
+    always_comb begin
+        if (rst)
+            read_out = 32'h00000000;
         else if (memread)
-            read_out <= mem[add];
-
+            read_out = mem[add];
+        else
+            read_out = 32'h00000000;
     end
 
 endmodule

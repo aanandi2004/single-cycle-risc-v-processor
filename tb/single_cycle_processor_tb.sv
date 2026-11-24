@@ -81,36 +81,45 @@ module top_tb;
         dut.IM.mem[18] = 8'h30;
         dut.IM.mem[19] = 8'h00;
 
-
         // =================================
-        // INSTRUCTION 6: BEQ x3, x3, 8
+        // INSTRUCTION 6: LW x4, 8(x0)
         // =================================
 
-        dut.IM.mem[20] = 8'h63;
-        dut.IM.mem[21] = 8'h84;
-        dut.IM.mem[22] = 8'h31;
+        dut.IM.mem[20] = 8'h03;
+        dut.IM.mem[21] = 8'h22;
+        dut.IM.mem[22] = 8'h80;
         dut.IM.mem[23] = 8'h00;
 
 
         // =================================
-        // INSTRUCTION 7: ADDI x5, x0, 99
+        // INSTRUCTION 7: BEQ x3, x3, 8
+        // =================================
+
+        dut.IM.mem[24] = 8'h63;
+        dut.IM.mem[25] = 8'h84;
+        dut.IM.mem[26] = 8'h31;
+        dut.IM.mem[27] = 8'h00;
+
+
+        // =================================
+        // INSTRUCTION 8: ADDI x5, x0, 99
         // This instruction should be skipped
         // =================================
 
-        dut.IM.mem[24] = 8'h93;
-        dut.IM.mem[25] = 8'h02;
-        dut.IM.mem[26] = 8'h30;
-        dut.IM.mem[27] = 8'h06;
+        dut.IM.mem[28] = 8'h93;
+        dut.IM.mem[29] = 8'h02;
+        dut.IM.mem[30] = 8'h30;
+        dut.IM.mem[31] = 8'h06;
 
 
         // =================================
-        // INSTRUCTION 8: ADDI x6, x0, 11
+        // INSTRUCTION 9: ADDI x6, x0, 11
         // =================================
 
-        dut.IM.mem[28] = 8'h13;
-        dut.IM.mem[29] = 8'h03;
-        dut.IM.mem[30] = 8'hB0;
-        dut.IM.mem[31] = 8'h00;
+        dut.IM.mem[32] = 8'h13;
+        dut.IM.mem[33] = 8'h03;
+        dut.IM.mem[34] = 8'hB0;
+        dut.IM.mem[35] = 8'h00;
 
 
         // =================================
@@ -118,20 +127,23 @@ module top_tb;
         // =================================
 
         $monitor(
-            "TIME=%0t | PC=%0d | INSTR=%h | ALU=%0d | REGWRITE=%b | MEMWRITE=%b | x1=%0d | x2=%0d | x3=%0d | x5=%0d | x6=%0d | MEM[8]=%0d",
-            $time,
-            dut.pc_current,
-            dut.instruction,
-            dut.alu_result,
-            dut.RegWrite,
-            dut.MemWrite,
-            dut.RF.mem[1],
-            dut.RF.mem[2],
-            dut.RF.mem[3],
-            dut.RF.mem[5],
-            dut.RF.mem[6],
-            dut.DM.mem[8]
-        );
+    "TIME=%0t | PC=%0d | INSTR=%h | ALU=%0d | REGWRITE=%b | MEMWRITE=%b | MEMREAD=%b | x1=%0d | x2=%0d | x3=%0d | x4=%0d | x5=%0d | x6=%0d | MEM[8]=%0d | READ_OUT=%0d",
+    $time,
+    dut.pc_current,
+    dut.instruction,
+    dut.alu_result,
+    dut.RegWrite,
+    dut.MemWrite,
+    dut.MemRead,
+    dut.RF.mem[1],
+    dut.RF.mem[2],
+    dut.RF.mem[3],
+    dut.RF.mem[4],
+    dut.RF.mem[5],
+    dut.RF.mem[6],
+    dut.DM.mem[8],
+    dut.DM.read_out
+);
 
 
         // =================================
@@ -207,23 +219,35 @@ module top_tb;
             $error("FAIL: SW memory[8] expected 12, got %0d",
                    dut.DM.mem[8]);
 
-
         // =================================
-        // TEST 5: BEQ x3, x3, 8
+        // TEST 5: LW x4, 8(x0)
         // =================================
 
         @(posedge clk);
         #1;
 
-        if (dut.pc_current == 32'd28)
-            $display("PASS: BEQ branch taken, PC = 28");
+        if (dut.RF.mem[4] == 12)
+            $display("PASS: LW memory[4] = 12");
         else
-            $error("FAIL: BEQ expected PC=28, got %0d",
-                   dut.pc_current);
+            $error("FAIL: LW memory[4] expected 12, got %0d",
+                   dut.RF.mem[4]);
+
+        // =================================
+        // TEST 6: BEQ x3, x3, 8
+        // =================================
+
+        @(posedge clk);
+        #1;
+
+        if (dut.pc_current == 32'd32)
+            $display("PASS: BEQ branch taken, PC = 32");
+        else
+            $error("FAIL: BEQ expected PC=32, got %0d",
+                dut.pc_current);
 
 
         // =================================
-        // TEST 6: ADDI x6, x0, 11
+        // TEST 7: ADDI x6, x0, 11
         // =================================
 
         @(posedge clk);
