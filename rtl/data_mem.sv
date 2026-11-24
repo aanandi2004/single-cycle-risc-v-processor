@@ -1,5 +1,4 @@
-
-module data_mem (
+module data_mem(
     input  logic        clk,
     input  logic        rst,
     input  logic [31:0] add,
@@ -11,18 +10,17 @@ module data_mem (
 
     logic [31:0] mem [0:31];
 
-    // Combinational read
-    always_comb begin
-        if (memread)
-            read_out = mem[add[6:2]];
-        else
-            read_out = 32'b0;
-    end
+    always @(posedge clk) begin
 
-    // Synchronous write
-    always_ff @(posedge clk) begin
-        if (rst && memwrite)
-            mem[add[6:2]] <= write_data;
+        if (rst)
+            read_out <= 32'h00000000;
+
+        else if (memwrite)
+            mem[add] <= write_data;
+
+        else if (memread)
+            read_out <= mem[add];
+
     end
 
 endmodule
