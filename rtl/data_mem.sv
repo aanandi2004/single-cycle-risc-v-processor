@@ -10,18 +10,21 @@ module data_mem(
 
     logic [31:0] mem [0:31];
 
-    always @(posedge clk) begin
+    //write SW
+    always_ff @(posedge clk) begin
 
-        if (rst)
+        if (!rst)
             read_out <= 32'h00000000;
 
         else if (memwrite)
             mem[add] <= write_data;
     end
 
-        // Combinational read
+    //assign read_out = (!rst) ? 32'b0 : (memread) ? mem[index] : 32'b0;
+
+        // Combinational read LW
     always_comb begin
-        if (rst)
+        if (!rst)
             read_out = 32'h00000000;
         else if (memread)
             read_out = mem[add];

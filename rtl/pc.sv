@@ -1,11 +1,11 @@
 module pc (
     input  logic        clk,
-    input  logic        rst,      // active-low asynchronous reset
+    input  logic        rst,      // active-low synchronous reset
     input  logic [31:0] pc_in,
     output logic [31:0] pc_out
 );
 
-    always_ff @(posedge clk or negedge rst) begin
+    always_ff @(posedge clk) begin
         if (!rst) begin
             pc_out <= 32'h0000_0000;
         end else begin

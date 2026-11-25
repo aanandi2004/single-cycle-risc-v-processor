@@ -16,8 +16,13 @@ module top_tb;
 
     initial begin
 
+
         clk = 0;
         rst = 0;
+        // Generate waveform
+        $dumpfile("top_sim.vcd");
+        $dumpvars(0, top_tb);
+
 
         // Initialize Instruction Memory
         for (int i = 0; i < 1024; i++)
@@ -66,7 +71,7 @@ module top_tb;
         // INSTRUCTION 4: NOP
         // =================================
 
-        dut.IM.mem[12] = 8'h00;
+        dut.IM.mem[12] = 8'h13;
         dut.IM.mem[13] = 8'h00;
         dut.IM.mem[14] = 8'h00;
         dut.IM.mem[15] = 8'h00;
@@ -131,7 +136,7 @@ module top_tb;
     $time,
     dut.pc_current,
     dut.instruction,
-    dut.alu_result,
+    dut.alu_out,
     dut.RegWrite,
     dut.MemWrite,
     dut.MemRead,

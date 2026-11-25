@@ -20,8 +20,8 @@ module single_cycle_processor (
     logic [31:0] imm_i;
     logic [31:0] alu_input2;
 
-    logic [63:0] alu_out;
-    logic [31:0] alu_result;
+    logic [31:0] alu_out;
+    //logic [31:0] alu_result;
 
     logic [31:0] mem_read_data;
     logic [31:0] write_back_data;
@@ -35,7 +35,7 @@ module single_cycle_processor (
 
     logic [1:0] ALUOp;
     logic [2:0] alu_ctrl_out;
-    logic [3:0] alu_sel;
+    logic [2:0] alu_sel;
 
     logic carry;
     logic borrow;
@@ -126,6 +126,16 @@ module single_cycle_processor (
                              instruction[11:7]};
             end
 
+            // B-Type
+            7'b1100011: begin
+                immediate = {{19{instruction[31]}}, 
+                             instruction[31],
+                             instruction[7],
+                             instruction[30:25],
+                             instruction[11:8],
+                             1'b0};
+            end
+
             default: begin
                 immediate = 32'b0;
             end
@@ -138,30 +148,25 @@ module single_cycle_processor (
     // 7. ALU Control
 
     alu_control ALU_CTRL (
-        .funct7(instruction[31:25]), // why-
-        .funct3(instruction[14:12]),//why 
+        .funct7(instruction[31:25]), 
+        .funct3(instruction[14:12]),
         .ALUOp(ALUOp),
         .alu_ctrl_out(alu_ctrl_out)
     );
 
 
     // 8. ALU Encoding Conversion
-    // Original ALU uses 4-bit encoding
+    // Original ALU uses 3-bit encoding
 
     always_comb begin
-
         case(alu_ctrl_out)
-
-            3'b000: alu_sel = 4'b0000; // ADD
-            3'b001: alu_sel = 4'b0001; // SUB
-            3'b011: alu_sel = 4'b0110; // XOR
-            3'b100: alu_sel = 4'b0100; // AND
-            3'b101: alu_sel = 4'b0101; // OR
-
-            default: alu_sel = 4'b0000;
-
+            3'b000: alu_sel = 3'b000; // ADD
+            3'b001: alu_sel = 3'b001; // SUB
+            3'b011: alu_sel = 3'b011; // XOR
+            3'b100: alu_sel = 3'b100; // AND
+            3'b101: alu_sel = 3'b101; // OR
+            default: alu_sel = 3'b000;
         endcase
-
     end
 
 
@@ -189,15 +194,15 @@ module single_cycle_processor (
         .negative(negative)
     );
 
-    assign alu_result = alu_out[31:0];
+    //assign alu_result = alu_out;
 
 
     // 11. Data Memory
 
     data_mem DM (
         .clk(clk),
-        .rst(~rst),
-        .add(alu_result),
+        .rst(rst),
+        .add(alu_out),
         .write_data(read_data2),
         .read_out(mem_read_data),
         .memwrite(MemWrite),
@@ -208,7 +213,7 @@ module single_cycle_processor (
     // 12. Write Back MUX
 
     mux_wb WB_MUX (
-        .alu_result(alu_result),
+        .alu_result(alu_out),
         .mem_read_data(mem_read_data),
         .memtoreg(MemtoReg),
         .write_data(write_back_data)
